@@ -9,10 +9,10 @@ if (!MONGODB_URI) {
 }
 
 async function seed() {
-  await mongoose.connect(MONGODB_URI as string)
+  await mongoose.connect(MONGODB_URI)
   console.log("Connected to MongoDB")
 
-  const db = mongoose.connection.db!
+  const db = mongoose.connection.db
   const usersCol = db.collection("users")
 
   const existing = await usersCol.findOne({ email: "admin@nyap.com" })

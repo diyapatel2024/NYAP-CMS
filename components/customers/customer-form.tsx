@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
+import { parseApiError } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 
 interface CustomerFormProps {
@@ -16,11 +17,10 @@ interface CustomerFormProps {
     _id: string
     name: string
     businessName?: string
-    phone?: string
+    mobileNumber?: string
+    alternateMobileNumber?: string
     email?: string
-    address?: string
-    deliveryAddress?: string
-    route?: string
+    location?: string
     status: string
   }
 }
@@ -32,11 +32,10 @@ export function CustomerForm({ initialData }: CustomerFormProps) {
   const [form, setForm] = useState({
     name: initialData?.name || "",
     businessName: initialData?.businessName || "",
-    phone: initialData?.phone || "",
+    mobileNumber: initialData?.mobileNumber || "",
+    alternateMobileNumber: initialData?.alternateMobileNumber || "",
     email: initialData?.email || "",
-    address: initialData?.address || "",
-    deliveryAddress: initialData?.deliveryAddress || "",
-    route: initialData?.route || "",
+    location: initialData?.location || "",
     status: initialData?.status || "active",
   })
 
@@ -55,7 +54,7 @@ export function CustomerForm({ initialData }: CustomerFormProps) {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(typeof data.error === "string" ? data.error : "Validation failed")
+        throw new Error(parseApiError(data.error, "Validation failed"))
       }
       toast({ title: isEdit ? "Customer updated" : "Customer created", description: `${form.name} has been ${isEdit ? "updated" : "created"} successfully.` })
       router.push("/customers")
@@ -80,20 +79,20 @@ export function CustomerForm({ initialData }: CustomerFormProps) {
               <Input id="name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="businessName">Business Name</Label>
-              <Input id="businessName" value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} />
+              <Label htmlFor="businessName">Business Name *</Label>
+              <Input id="businessName" value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone</Label>
-              <Input id="phone" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+              <Label htmlFor="mobileNumber">Mobile Number *</Label>
+              <Input id="mobileNumber" value={form.mobileNumber} onChange={(e) => setForm({ ...form, mobileNumber: e.target.value })} required />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="alternateMobileNumber">Alternate Mobile Number</Label>
+              <Input id="alternateMobileNumber" value={form.alternateMobileNumber} onChange={(e) => setForm({ ...form, alternateMobileNumber: e.target.value })} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="route">Delivery Route</Label>
-              <Input id="route" value={form.route} onChange={(e) => setForm({ ...form, route: e.target.value })} placeholder="e.g., Route A" />
             </div>
             <div className="space-y-2">
               <Label>Status</Label>
@@ -107,12 +106,8 @@ export function CustomerForm({ initialData }: CustomerFormProps) {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="address">Address</Label>
-            <Textarea id="address" value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} rows={2} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="deliveryAddress">Delivery Address</Label>
-            <Textarea id="deliveryAddress" value={form.deliveryAddress} onChange={(e) => setForm({ ...form, deliveryAddress: e.target.value })} rows={2} placeholder="Leave blank if same as address" />
+            <Label htmlFor="location">Location</Label>
+            <Textarea id="location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} rows={2} />
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">

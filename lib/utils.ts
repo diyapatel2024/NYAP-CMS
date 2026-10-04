@@ -30,3 +30,16 @@ export function getTomorrowDate(): string {
 export function getTodayDate(): string {
   return new Date().toISOString().split("T")[0]
 }
+
+// Parse an API error payload into a readable message.
+// Handles plain strings and zod fieldErrors objects: { field: string[] }
+export function parseApiError(error: unknown, fallback = "Something went wrong"): string {
+  if (typeof error === "string") return error
+  if (error && typeof error === "object") {
+    const messages = Object.values(error as Record<string, string[] | undefined>)
+      .flat()
+      .filter(Boolean)
+    if (messages.length) return messages.join(", ")
+  }
+  return fallback
+}

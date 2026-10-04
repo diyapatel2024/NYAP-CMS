@@ -36,14 +36,18 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       existing.sellingPrice !== parsed.data.sellingPrice
 
     if (priceChanged) {
-      const lastHistory = await ProductPriceHistory.findOne({ productId: id }).sort({ version: -1 })
-      const nextVersion = lastHistory ? lastHistory.version + 1 : 1
+      const lastHistory = await ProductPriceHistory.findOne({ productId: id }).sort({ versionNumber: -1 })
+      const nextVersion = lastHistory ? lastHistory.versionNumber + 1 : 1
+      // Demote previous current version
+      await ProductPriceHistory.updateMany({ productId: id, isCurrent: true }, { isCurrent: false })
       await ProductPriceHistory.create({
         productId: id,
-        version: nextVersion,
+        versionNumber: nextVersion,
+        versionName: `v${nextVersion}`,
         purchasePrice: parsed.data.purchasePrice,
         sellingPrice: parsed.data.sellingPrice,
         effectiveDate: new Date(),
+        isCurrent: true,
         changedBy: "admin",
       })
     }

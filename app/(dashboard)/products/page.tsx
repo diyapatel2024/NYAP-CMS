@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/shared/page-header"
 import { ProductList } from "@/components/products/product-list"
+import { ProductFormModal } from "@/components/products/product-form-modal"
 
 export default function ProductsPage() {
   return (
@@ -7,9 +8,9 @@ export default function ProductsPage() {
       <PageHeader
         title="Products"
         description="Manage your dairy products and pricing"
-        createHref="/products/new"
-        createLabel="Add Product"
-      />
+      >
+        <ProductFormModal />
+      </PageHeader>
       <ProductList />
     </div>
   )

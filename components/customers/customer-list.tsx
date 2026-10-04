@@ -16,8 +16,8 @@ interface Customer {
   _id: string
   name: string
   businessName?: string
-  phone?: string
-  route?: string
+  mobileNumber?: string
+  alternateMobileNumber?: string
   status: string
   [key: string]: unknown
 }
@@ -43,9 +43,9 @@ export function CustomerList() {
 
   const columns: Column<Customer>[] = [
     { key: "name", label: "Name", sortable: true },
-    { key: "businessName", label: "Business" },
-    { key: "phone", label: "Phone" },
-    { key: "route", label: "Route" },
+    { key: "businessName", label: "Business Name", sortable: true },
+    { key: "mobileNumber", label: "Mobile Number" },
+    { key: "alternateMobileNumber", label: "Alt. Mobile" },
     { key: "status", label: "Status", render: (c) => <StatusBadge status={c.status} /> },
     {
       key: "actions",

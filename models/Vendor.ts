@@ -4,7 +4,7 @@ export interface IVendorDoc extends Document {
   name: string
   location: string
   mobileNumber: string
-  email: string
+  contactNumber: string
   status: "active" | "inactive"
   isDeleted: boolean
   createdAt: Date
@@ -16,7 +16,7 @@ const VendorSchema = new Schema<IVendorDoc>(
     name: { type: String, required: true },
     location: { type: String, default: "" },
     mobileNumber: { type: String, required: true },
-    email: { type: String, default: "" },
+    contactNumber: { type: String, default: "" },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
     isDeleted: { type: Boolean, default: false },
   },

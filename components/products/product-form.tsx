@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
+import { parseApiError } from "@/lib/utils"
 import { Loader2 } from "lucide-react"
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json())
@@ -23,13 +24,16 @@ interface ProductFormProps {
     sellingPrice: number
     status: string
   }
+  onSuccess?: () => void
+  onCancel?: () => void
 }
 
-export function ProductForm({ initialData }: ProductFormProps) {
+export function ProductForm({ initialData, onSuccess, onCancel }: ProductFormProps) {
   const router = useRouter()
   const { toast } = useToast()
   const { data: vendors } = useSWR("/api/vendors", fetcher)
   const [loading, setLoading] = useState(false)
+  const isModal = !!onSuccess
 
   const vendorIdValue = initialData?.vendorId
     ? typeof initialData.vendorId === "object"
@@ -61,11 +65,15 @@ export function ProductForm({ initialData }: ProductFormProps) {
       })
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(typeof data.error === "string" ? data.error : "Validation failed")
+        throw new Error(parseApiError(data.error, "Validation failed"))
       }
       toast({ title: isEdit ? "Product updated" : "Product created", description: `${form.name} has been ${isEdit ? "updated" : "created"} successfully.` })
-      router.push("/products")
-      router.refresh()
+      if (onSuccess) {
+        onSuccess()
+      } else {
+        router.push("/products")
+        router.refresh()
+      }
     } catch (err) {
       toast({ title: "Error", description: err instanceof Error ? err.message : "Something went wrong", variant: "destructive" })
     } finally {
@@ -73,13 +81,8 @@ export function ProductForm({ initialData }: ProductFormProps) {
     }
   }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <Card>
-        <CardHeader>
-          <CardTitle>{isEdit ? "Edit Product" : "Add New Product"}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+  const fields = (
+    <>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="name">Product Name *</Label>
@@ -139,14 +142,36 @@ export function ProductForm({ initialData }: ProductFormProps) {
               </p>
             </div>
           )}
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button type="button" variant="outline" onClick={() => router.back()}>Cancel</Button>
-          <Button type="submit" disabled={loading}>
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isEdit ? "Update Product" : "Create Product"}
-          </Button>
-        </CardFooter>
+    </>
+  )
+
+  const footer = (
+    <>
+      <Button type="button" variant="outline" onClick={() => (onCancel ? onCancel() : router.back())}>Cancel</Button>
+      <Button type="submit" disabled={loading}>
+        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        {isEdit ? "Update Product" : "Create Product"}
+      </Button>
+    </>
+  )
+
+  if (isModal) {
+    return (
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {fields}
+        <div className="flex justify-between pt-2">{footer}</div>
+      </form>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Card>
+        <CardHeader>
+          <CardTitle>{isEdit ? "Edit Product" : "Add New Product"}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">{fields}</CardContent>
+        <CardFooter className="flex justify-between">{footer}</CardFooter>
       </Card>
     </form>
   )

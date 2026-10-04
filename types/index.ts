@@ -3,7 +3,6 @@ export interface IVendor {
   name: string
   location: string
   mobileNumber: string
-  email: string
   status: "active" | "inactive"
   isDeleted: boolean
   createdAt: string
@@ -16,7 +15,8 @@ export interface IProduct {
   description: string
   vendorId: string | IVendor
   unit: string
-  currentPurchasePrice: number
+  purchasePrice: number
+  sellingPrice: number
   status: "active" | "inactive"
   isDeleted: boolean
   createdAt: string
@@ -28,19 +28,20 @@ export interface IProductPriceHistory {
   productId: string
   versionNumber: number
   versionName: string
-  price: number
+  purchasePrice: number
+  sellingPrice: number
   effectiveDate: string
   isCurrent: boolean
+  changedBy: string
   createdAt: string
 }
 
 export interface ICustomer {
   _id: string
   name: string
-  username: string
+  businessName: string
   mobileNumber: string
   alternateMobileNumber: string
-  email: string
   location: string
   status: "active" | "inactive"
   isDeleted: boolean

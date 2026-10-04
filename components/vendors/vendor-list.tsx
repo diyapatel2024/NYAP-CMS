@@ -1,12 +1,12 @@
 "use client"
 
-import { useRouter } from "next/navigation"
 import useSWR from "swr"
 import { DataTable, Column } from "@/components/shared/data-table"
 import { StatusBadge } from "@/components/shared/status-badge"
 import { Loading } from "@/components/shared/loading"
 import { Button } from "@/components/ui/button"
 import { DeleteDialog } from "@/components/shared/delete-dialog"
+import { VendorFormModal } from "@/components/vendors/vendor-form-modal"
 import { Edit, Trash2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
@@ -15,8 +15,9 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json())
 interface Vendor {
   _id: string
   name: string
-  contactPerson?: string
-  phone?: string
+  location?: string
+  mobileNumber?: string
+  contactNumber?: string
   email?: string
   status: string
   [key: string]: unknown
@@ -24,7 +25,6 @@ interface Vendor {
 
 export function VendorList() {
   const { data: vendors, error, mutate } = useSWR<Vendor[]>("/api/vendors", fetcher)
-  const router = useRouter()
   const { toast } = useToast()
 
   async function handleDelete(id: string) {
@@ -43,18 +43,24 @@ export function VendorList() {
 
   const columns: Column<Vendor>[] = [
     { key: "name", label: "Name", sortable: true },
-    { key: "contactPerson", label: "Contact Person" },
-    { key: "phone", label: "Phone" },
+    { key: "mobileNumber", label: "Mobile Number" },
+    { key: "contactNumber", label: "Contact Number" },
     { key: "email", label: "Email" },
+    { key: "location", label: "Location" },
     { key: "status", label: "Status", render: (v) => <StatusBadge status={v.status} /> },
     {
       key: "actions",
       label: "Actions",
       render: (v) => (
         <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-          <Button variant="ghost" size="sm" onClick={() => router.push(`/vendors/${v._id}/edit`)}>
-            <Edit className="h-4 w-4" />
-          </Button>
+          <VendorFormModal
+            initialData={v}
+            trigger={
+              <Button variant="ghost" size="sm">
+                <Edit className="h-4 w-4" />
+              </Button>
+            }
+          />
           <DeleteDialog
             onConfirm={() => handleDelete(v._id)}
             trigger={

@@ -4,7 +4,7 @@ export const vendorSchema = z.object({
   name: z.string().min(1, "Name is required"),
   location: z.string().optional().default(""),
   mobileNumber: z.string().min(1, "Mobile number is required"),
-  email: z.string().email().optional().or(z.literal("")).default(""),
+  contactNumber: z.string().optional().default(""),
   status: z.enum(["active", "inactive"]).default("active"),
 })
 
@@ -13,16 +13,16 @@ export const productSchema = z.object({
   description: z.string().optional().default(""),
   vendorId: z.string().min(1, "Vendor is required"),
   unit: z.string().min(1, "Unit is required"),
-  currentPurchasePrice: z.coerce.number().min(0, "Price must be >= 0"),
+  purchasePrice: z.coerce.number().min(0, "Price must be >= 0"),
+  sellingPrice: z.coerce.number().min(0, "Price must be >= 0"),
   status: z.enum(["active", "inactive"]).default("active"),
 })
 
 export const customerSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  username: z.string().min(1, "Username is required"),
+  businessName: z.string().min(1, "Business name is required"),
   mobileNumber: z.string().min(1, "Mobile number is required"),
   alternateMobileNumber: z.string().optional().default(""),
-  email: z.string().email().optional().or(z.literal("")).default(""),
   location: z.string().optional().default(""),
   status: z.enum(["active", "inactive"]).default("active"),
 })

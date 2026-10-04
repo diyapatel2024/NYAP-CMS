@@ -7,6 +7,7 @@ import { StatusBadge } from "@/components/shared/status-badge"
 import { Loading } from "@/components/shared/loading"
 import { Button } from "@/components/ui/button"
 import { DeleteDialog } from "@/components/shared/delete-dialog"
+import { ProductFormModal } from "@/components/products/product-form-modal"
 import { Edit, Trash2, History } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { formatCurrency } from "@/lib/utils"
@@ -58,9 +59,14 @@ export function ProductList() {
           <Button variant="ghost" size="sm" onClick={() => router.push(`/products/${p._id}/price-history`)}>
             <History className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => router.push(`/products/${p._id}/edit`)}>
-            <Edit className="h-4 w-4" />
-          </Button>
+          <ProductFormModal
+            initialData={p}
+            trigger={
+              <Button variant="ghost" size="sm">
+                <Edit className="h-4 w-4" />
+              </Button>
+            }
+          />
           <DeleteDialog
             onConfirm={() => handleDelete(p._id)}
             trigger={

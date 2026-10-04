@@ -5,7 +5,8 @@ export interface IProductDoc extends Document {
   description: string
   vendorId: Types.ObjectId
   unit: string
-  currentPurchasePrice: number
+  purchasePrice: number
+  sellingPrice: number
   status: "active" | "inactive"
   isDeleted: boolean
   createdAt: Date
@@ -18,7 +19,8 @@ const ProductSchema = new Schema<IProductDoc>(
     description: { type: String, default: "" },
     vendorId: { type: Schema.Types.ObjectId, ref: "Vendor", required: true },
     unit: { type: String, required: true, default: "kg" },
-    currentPurchasePrice: { type: Number, required: true, default: 0 },
+    purchasePrice: { type: Number, required: true, default: 0 },
+    sellingPrice: { type: Number, required: true, default: 0 },
     status: { type: String, enum: ["active", "inactive"], default: "active" },
     isDeleted: { type: Boolean, default: false },
   },

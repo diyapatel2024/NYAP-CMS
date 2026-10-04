@@ -11,10 +11,12 @@ const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 interface PriceEntry {
   _id: string
-  version: number
+  versionNumber: number
+  versionName: string
   purchasePrice: number
   sellingPrice: number
   effectiveDate: string
+  isCurrent: boolean
   changedBy: string
 }
 
@@ -44,10 +46,10 @@ export function PriceHistoryView({ productId, productName }: { productId: string
               </TableRow>
             </TableHeader>
             <TableBody>
-              {history.map((entry, i) => (
+              {history.map((entry) => (
                 <TableRow key={entry._id}>
                   <TableCell>
-                    <Badge variant={i === 0 ? "default" : "secondary"}>v{entry.version}</Badge>
+                    <Badge variant={entry.isCurrent ? "default" : "secondary"}>{entry.versionName}</Badge>
                   </TableCell>
                   <TableCell>{formatCurrency(entry.purchasePrice)}</TableCell>
                   <TableCell>{formatCurrency(entry.sellingPrice)}</TableCell>

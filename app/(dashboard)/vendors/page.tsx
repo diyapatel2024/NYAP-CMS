@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/shared/page-header"
 import { VendorList } from "@/components/vendors/vendor-list"
+import { VendorFormModal } from "@/components/vendors/vendor-form-modal"
 
 export default function VendorsPage() {
   return (
@@ -7,9 +8,9 @@ export default function VendorsPage() {
       <PageHeader
         title="Vendors"
         description="Manage your dairy product vendors"
-        createHref="/vendors/new"
-        createLabel="Add Vendor"
-      />
+      >
+        <VendorFormModal />
+      </PageHeader>
       <VendorList />
     </div>
   )

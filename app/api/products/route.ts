@@ -31,10 +31,12 @@ export async function POST(req: NextRequest) {
     // Create initial price history entry (v1)
     await ProductPriceHistory.create({
       productId: product._id,
-      version: 1,
+      versionNumber: 1,
+      versionName: "v1",
       purchasePrice: product.purchasePrice,
       sellingPrice: product.sellingPrice,
       effectiveDate: new Date(),
+      isCurrent: true,
       changedBy: "system",
     })
 

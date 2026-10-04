@@ -6,7 +6,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   try {
     await dbConnect()
     const { id } = await params
-    const history = await ProductPriceHistory.find({ productId: id }).sort({ version: -1 }).lean()
+    const history = await ProductPriceHistory.find({ productId: id }).sort({ versionNumber: -1 }).lean()
     return NextResponse.json(history)
   } catch (error) {
     console.error("GET /api/products/[id]/price-history error:", error)

@@ -18,7 +18,6 @@ interface Vendor {
   location?: string
   mobileNumber?: string
   contactNumber?: string
-  email?: string
   status: string
   [key: string]: unknown
 }
@@ -45,7 +44,6 @@ export function VendorList() {
     { key: "name", label: "Name", sortable: true },
     { key: "mobileNumber", label: "Mobile Number" },
     { key: "contactNumber", label: "Contact Number" },
-    { key: "email", label: "Email" },
     { key: "location", label: "Location" },
     { key: "status", label: "Status", render: (v) => <StatusBadge status={v.status} /> },
     {

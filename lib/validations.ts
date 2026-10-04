@@ -29,7 +29,7 @@ export const customerSchema = z.object({
 
 export const customerProductSchema = z.object({
   productId: z.string().min(1, "Product is required"),
-  currentSellingPrice: z.coerce.number().min(0, "Price must be >= 0"),
+  customPrice: z.coerce.number().min(0, "Price must be >= 0"),
 })
 
 export const orderItemSchema = z.object({

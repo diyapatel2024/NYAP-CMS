@@ -31,11 +31,13 @@ interface ProductOption {
 }
 
 export function CustomerProducts({ customerId, customerName }: { customerId: string; customerName: string }) {
-  const { data: customerProducts, error, mutate } = useSWR<CustomerProductEntry[]>(
+  const { data: cpData, error, mutate } = useSWR<CustomerProductEntry[]>(
     `/api/customers/${customerId}/products`,
     fetcher
   )
-  const { data: allProducts } = useSWR<ProductOption[]>("/api/products", fetcher)
+  const { data: productsData } = useSWR<ProductOption[]>("/api/products", fetcher)
+  const customerProducts = Array.isArray(cpData) ? cpData : undefined
+  const allProducts = Array.isArray(productsData) ? productsData : undefined
   const { toast } = useToast()
   const [addOpen, setAddOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)

@@ -19,7 +19,6 @@ interface VendorFormProps {
     location?: string
     mobileNumber?: string
     contactNumber?: string
-    email?: string
     status: string
   }
   onSuccess?: () => void
@@ -36,7 +35,6 @@ export function VendorForm({ initialData, onSuccess, onCancel }: VendorFormProps
     location: initialData?.location || "",
     mobileNumber: initialData?.mobileNumber || "",
     contactNumber: initialData?.contactNumber || "",
-    email: initialData?.email || "",
     status: initialData?.status || "active",
   })
 
@@ -85,10 +83,6 @@ export function VendorForm({ initialData, onSuccess, onCancel }: VendorFormProps
         <div className="space-y-2">
           <Label htmlFor="contactNumber">Contact Number</Label>
           <Input id="contactNumber" value={form.contactNumber} onChange={(e) => setForm({ ...form, contactNumber: e.target.value })} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
         </div>
       </div>
       <div className="space-y-2">

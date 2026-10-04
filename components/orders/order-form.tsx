@@ -34,7 +34,8 @@ interface CustomerProduct {
 export function OrderForm() {
   const router = useRouter()
   const { toast } = useToast()
-  const { data: customers } = useSWR("/api/customers", fetcher)
+  const { data: customersData } = useSWR("/api/customers", fetcher)
+  const customers = Array.isArray(customersData) ? customersData : []
   const [loading, setLoading] = useState(false)
   const [customerId, setCustomerId] = useState("")
   const [deliveryDate, setDeliveryDate] = useState(() => {
@@ -56,9 +57,10 @@ export function OrderForm() {
     fetch(`/api/customers/${customerId}/products`)
       .then((r) => r.json())
       .then((data) => {
-        setCustomerProducts(data)
+        const list: CustomerProduct[] = Array.isArray(data) ? data : []
+        setCustomerProducts(list)
         // Auto-populate items with all assigned products
-        const autoItems: OrderItemRow[] = data.map((cp: CustomerProduct) => ({
+        const autoItems: OrderItemRow[] = list.map((cp: CustomerProduct) => ({
           productId: cp.productId._id,
           productName: cp.productId.name,
           unit: cp.productId.unit,

@@ -41,14 +41,16 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       customPrice,
     })
 
-    // Create initial price history
+    // Create initial price history (v1)
     await CustomerProductPriceHistory.create({
       customerProductId: cp._id,
       customerId: id,
       productId,
-      version: 1,
+      versionNumber: 1,
+      versionName: "v1",
       customPrice,
       effectiveDate: new Date(),
+      isCurrent: true,
       changedBy: "admin",
     })
 

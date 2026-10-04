@@ -22,7 +22,7 @@ interface OrderDetailData {
     productId: { name: string; unit: string }
     quantity: number
     finalPriceUsed: number
-    itemTotal: number
+    totalPrice: number
   }>
 }
 
@@ -117,7 +117,7 @@ export function OrderDetail({ orderId }: { orderId: string }) {
                   <TableCell className="capitalize">{item.productId?.unit}</TableCell>
                   <TableCell>{item.quantity}</TableCell>
                   <TableCell>{formatCurrency(item.finalPriceUsed)}</TableCell>
-                  <TableCell className="font-medium">{formatCurrency(item.itemTotal)}</TableCell>
+                  <TableCell className="font-medium">{formatCurrency(item.totalPrice)}</TableCell>
                 </TableRow>
               ))}
               <TableRow>

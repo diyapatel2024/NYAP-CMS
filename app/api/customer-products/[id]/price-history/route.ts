@@ -7,7 +7,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     await dbConnect()
     const { id } = await params
     const history = await CustomerProductPriceHistory.find({ customerProductId: id })
-      .sort({ version: -1 })
+      .sort({ versionNumber: -1 })
       .lean()
     return NextResponse.json(history)
   } catch (error) {

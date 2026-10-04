@@ -44,14 +44,16 @@ export function DataTable<T extends Record<string, unknown>>({
   const [sortKey, setSortKey] = useState<string | null>(null)
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc")
 
+  const safeData = Array.isArray(data) ? data : []
+
   const filtered = useMemo(() => {
-    if (!search || !searchKey) return data
-    return data.filter((item) => {
+    if (!search || !searchKey) return safeData
+    return safeData.filter((item) => {
       const val = item[searchKey]
       if (typeof val === "string") return val.toLowerCase().includes(search.toLowerCase())
       return false
     })
-  }, [data, search, searchKey])
+  }, [safeData, search, searchKey])
 
   const sorted = useMemo(() => {
     if (!sortKey) return filtered

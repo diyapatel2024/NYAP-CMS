@@ -8,6 +8,7 @@ import {
   Truck,
   Package,
   Users,
+  Tags,
   ShoppingCart,
   ClipboardList,
   Settings,
@@ -25,6 +26,7 @@ const navItems = [
   { href: "/vendors", label: "Vendors", icon: Truck },
   { href: "/products", label: "Products", icon: Package },
   { href: "/customers", label: "Customers", icon: Users },
+  { href: "/customer-products", label: "Customer Pricing", icon: Tags },
   { href: "/orders", label: "Orders", icon: ShoppingCart },
   { href: "/bulk-orders", label: "Bulk Orders", icon: ClipboardList },
 ]

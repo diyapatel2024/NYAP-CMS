@@ -53,7 +53,7 @@ export interface ICustomerProduct {
   _id: string
   customerId: string | ICustomer
   productId: string | IProduct
-  currentSellingPrice: number
+  customPrice: number
   createdAt: string
   updatedAt: string
 }
@@ -61,12 +61,14 @@ export interface ICustomerProduct {
 export interface ICustomerProductPriceHistory {
   _id: string
   customerProductId: string
+  customerId: string
+  productId: string
   versionNumber: number
   versionName: string
-  price: number
-  basedOnVendorVersion: string
+  customPrice: number
   effectiveDate: string
   isCurrent: boolean
+  changedBy: string
   createdAt: string
 }
 

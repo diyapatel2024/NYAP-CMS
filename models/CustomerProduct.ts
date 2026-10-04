@@ -3,7 +3,7 @@ import mongoose, { Schema, type Document, type Types } from "mongoose"
 export interface ICustomerProductDoc extends Document {
   customerId: Types.ObjectId
   productId: Types.ObjectId
-  currentSellingPrice: number
+  customPrice: number
   createdAt: Date
   updatedAt: Date
 }
@@ -12,7 +12,7 @@ const CustomerProductSchema = new Schema<ICustomerProductDoc>(
   {
     customerId: { type: Schema.Types.ObjectId, ref: "Customer", required: true },
     productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-    currentSellingPrice: { type: Number, required: true, default: 0 },
+    customPrice: { type: Number, required: true, default: 0 },
   },
   { timestamps: true }
 )

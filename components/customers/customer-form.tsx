@@ -19,7 +19,6 @@ interface CustomerFormProps {
     businessName?: string
     mobileNumber?: string
     alternateMobileNumber?: string
-    email?: string
     location?: string
     status: string
   }
@@ -34,7 +33,6 @@ export function CustomerForm({ initialData }: CustomerFormProps) {
     businessName: initialData?.businessName || "",
     mobileNumber: initialData?.mobileNumber || "",
     alternateMobileNumber: initialData?.alternateMobileNumber || "",
-    email: initialData?.email || "",
     location: initialData?.location || "",
     status: initialData?.status || "active",
   })
@@ -89,10 +87,6 @@ export function CustomerForm({ initialData }: CustomerFormProps) {
             <div className="space-y-2">
               <Label htmlFor="alternateMobileNumber">Alternate Mobile Number</Label>
               <Input id="alternateMobileNumber" value={form.alternateMobileNumber} onChange={(e) => setForm({ ...form, alternateMobileNumber: e.target.value })} />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
             </div>
             <div className="space-y-2">
               <Label>Status</Label>

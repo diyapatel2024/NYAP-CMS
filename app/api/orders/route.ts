@@ -62,33 +62,37 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "customerId, deliveryDate, and at least one item are required" }, { status: 400 })
     }
 
-    // Calculate total
+    // Calculate total — resolve each item's price by 3-tier priority:
+    // 1) order-time override  2) customer-product price  3) product default selling price
     let totalAmount = 0
     const processedItems = []
 
     for (const item of items) {
       const { productId, quantity, priceOverride } = item
 
-      // Get the customer-specific price or fallback to product selling price
-      let finalPrice = priceOverride
-      if (!finalPrice) {
-        const cp = await CustomerProduct.findOne({ customerId, productId })
-        if (cp) {
-          finalPrice = cp.customPrice
-        } else {
-          const product = await Product.findById(productId)
-          finalPrice = product?.sellingPrice || 0
-        }
-      }
+      const product = await Product.findById(productId)
+      const defaultSellingPrice = product?.sellingPrice ?? 0
 
-      const itemTotal = finalPrice * quantity
-      totalAmount += itemTotal
+      const cp = await CustomerProduct.findOne({ customerId, productId })
+      const customPrice = cp ? cp.customPrice : null
+
+      const finalPriceUsed =
+        priceOverride != null
+          ? priceOverride
+          : customPrice != null
+            ? customPrice
+            : defaultSellingPrice
+
+      const totalPrice = finalPriceUsed * quantity
+      totalAmount += totalPrice
 
       processedItems.push({
         productId,
         quantity,
-        finalPriceUsed: finalPrice,
-        itemTotal,
+        defaultSellingPrice,
+        customPrice,
+        finalPriceUsed,
+        totalPrice,
       })
     }
 
@@ -96,7 +100,7 @@ export async function POST(req: NextRequest) {
     const order = await Order.create({
       customerId,
       deliveryDate: new Date(deliveryDate),
-      status: "pending",
+      status: "Pending",
       totalAmount,
       notes: notes || "",
     })

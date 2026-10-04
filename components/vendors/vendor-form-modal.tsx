@@ -13,7 +13,6 @@ interface VendorData {
   location?: string
   mobileNumber?: string
   contactNumber?: string
-  email?: string
   status: string
 }
 
